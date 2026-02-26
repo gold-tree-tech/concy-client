@@ -472,6 +472,41 @@
         /* Suppress floatIn re-trigger for streamed completions */
         #concy-widget-root .message.finalized .message-bubble { animation: none !important; transition: box-shadow 0.2s ease; }
 
+        /* ===== Message Actions ===== */
+        #concy-widget-root .message-actions {
+          display: flex;
+          gap: 2px;
+          margin-top: 6px;
+          padding-left: 4px;
+          justify-content: flex-end;
+        }
+        #concy-widget-root .message-action-btn {
+          background: none;
+          border: none;
+          padding: 4px 6px;
+          cursor: pointer;
+          color: var(--color-text-secondary);
+          opacity: 0.4;
+          transition: opacity 0.15s ease, color 0.15s ease;
+          display: flex;
+          align-items: center;
+        }
+        #concy-widget-root .message-action-btn:hover {
+          opacity: 0.75;
+        }
+        #concy-widget-root .message-action-btn.active {
+          opacity: 1;
+          color: var(--color-text-primary);
+        }
+        #concy-widget-root .message-action-btn svg {
+          width: 15px;
+          height: 15px;
+        }
+        #concy-widget-root .message-action-btn.copied {
+          opacity: 1;
+          color: var(--color-primary);
+        }
+
         #concy-widget-root .message-time { font-size: 0.7rem; color: var(--color-text-secondary); opacity: 0.75; margin-top: var(--spacing-xs); padding: 0 var(--spacing-xs); }
         #concy-widget-root .time-slots, #concy-widget-root .restaurant-options { display: flex; flex-wrap: wrap; gap: var(--spacing-sm); margin-top: var(--spacing-sm); }
         #concy-widget-root .time-slot, #concy-widget-root .restaurant-option { padding: var(--spacing-xs) var(--spacing-md); background-color: var(--color-primary); color: var(--color-surface-elevated); border-radius: 0; font-size: 0.8rem; font-weight: 500; transition: all 0.2s ease; }
@@ -637,7 +672,7 @@
         /* ===== Mobile ===== */
         @media (max-width: 767px) {
             #concy-widget-root .chat-messages {
-              padding: var(--spacing-md) 10px 80px !important;
+              padding: var(--spacing-md) 20px 80px !important;
             }
             #concy-widget-root .message {
               max-width: 100% !important;
@@ -647,7 +682,7 @@
               padding: 0 !important;
             }
             #concy-widget-root .user-message {
-              max-width: 70% !important;
+              max-width: 75% !important;
               align-self: flex-end !important;
             }
             #concy-widget-root .message-avatar { display: none !important; }
@@ -668,6 +703,17 @@
             #concy-widget-root .message-bubble li {
               line-height: 1.55 !important;
               margin: 6px 0 !important;
+            }
+            #concy-widget-root .message-actions {
+              gap: 0 !important;
+              margin-top: 4px !important;
+            }
+            #concy-widget-root .message-action-btn {
+              padding: 6px 8px !important;
+            }
+            #concy-widget-root .message-action-btn svg {
+              width: 14px !important;
+              height: 14px !important;
             }
             #concy-widget-root .bot-message + .bot-message {
               margin-top: 18px !important;
@@ -1118,6 +1164,7 @@ class ConcyWidget {
           messageDiv.innerHTML = `
             <div class="message-content">
               <div class="message-bubble">${textHtml}</div>
+              ${this.createMessageActions()}
               ${suggestions.length > 0 ? this.createSuggestionChips(suggestions) : ''}
               <span class="message-time">${timeStr}</span>
             </div>`;
@@ -1165,6 +1212,7 @@ class ConcyWidget {
       messageDiv.innerHTML = `
         <div class="message-content">
           <div class="message-bubble">${bubbleHtml}${options ? this.createOptions(options) : ''}</div>
+          ${this.createMessageActions()}
           ${chips.length > 0 ? this.createSuggestionChips(chips) : ''}
           <span class="message-time">${timeStr}</span>
         </div>`;
@@ -1242,6 +1290,19 @@ class ConcyWidget {
     const parts = html.split(/(?=<h[34][\s>])/);
     return parts.map(p => p.trim()).filter(p => p);
   }
+  createMessageActions() {
+    return `<div class="message-actions">
+      <button class="message-action-btn" data-action="copy" title="Copy">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </button>
+      <button class="message-action-btn" data-action="thumbup" title="Good response">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg>
+      </button>
+      <button class="message-action-btn" data-action="thumbdown" title="Bad response">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 14V2"/><path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z"/></svg>
+      </button>
+    </div>`;
+  }
   createSuggestionChips(chips) {
     if (!chips || chips.length === 0) return '';
     const escapeHtml = (text) => {
@@ -1289,6 +1350,31 @@ class ConcyWidget {
     this.scrollToBottom();
   }
   async handleOptionClick(e) {
+    const actionBtn = e.target.closest('.message-action-btn');
+    if (actionBtn) {
+      e.preventDefault();
+      const action = actionBtn.dataset.action;
+      const messageDiv = actionBtn.closest('.bot-message');
+      const bubble = messageDiv?.querySelector('.message-bubble');
+      if (action === 'copy' && bubble) {
+        navigator.clipboard.writeText(bubble.innerText).then(() => {
+          actionBtn.classList.add('copied');
+          const origSvg = actionBtn.innerHTML;
+          actionBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+          setTimeout(() => { actionBtn.classList.remove('copied'); actionBtn.innerHTML = origSvg; }, 1500);
+        });
+      } else if (action === 'thumbup' || action === 'thumbdown') {
+        const opposite = action === 'thumbup' ? 'thumbdown' : 'thumbup';
+        const oppositeBtn = messageDiv?.querySelector(`[data-action="${opposite}"]`);
+        if (actionBtn.classList.contains('active')) {
+          actionBtn.classList.remove('active');
+        } else {
+          actionBtn.classList.add('active');
+          oppositeBtn?.classList.remove('active');
+        }
+      }
+      return;
+    }
     if (e.target.classList.contains('clarification-option')) {
       e.preventDefault();
       const query = e.target.dataset.query;
