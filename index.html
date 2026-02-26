@@ -529,7 +529,7 @@
         }
         #concy-widget-root .chat-input {
           flex: 1;
-          padding: 14px 52px 14px 20px;
+          padding: 14px 86px 14px 20px;
           background: #FFFFFF;
           border: none;
           border-radius: 28px;
@@ -585,6 +585,34 @@
         #concy-widget-root .thinking-toggle input[type="checkbox"]:checked + .toggle-slider::before {
           transform: translateX(18px);
           background-color: var(--color-surface-elevated);
+        }
+
+        /* ===== Voice Button ===== */
+        #concy-widget-root .voice-btn {
+          position: absolute;
+          right: 44px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 34px;
+          height: 34px;
+          background: transparent;
+          color: #999;
+          border-radius: 50%;
+          border: none;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: color 0.2s, background 0.2s;
+        }
+        #concy-widget-root .voice-btn:hover { color: #3C3C3C; }
+        #concy-widget-root .voice-btn.recording {
+          color: #e53e3e;
+          animation: voice-pulse 1.2s ease-in-out infinite;
+        }
+        @keyframes voice-pulse {
+          0%, 100% { transform: translateY(-50%) scale(1); }
+          50% { transform: translateY(-50%) scale(1.15); }
         }
 
         /* ===== Send Button ===== */
@@ -870,6 +898,12 @@
                         <input type="checkbox" id="thinkingToggle">
                         <span class="toggle-slider"></span>
                     </label>
+                    <button class="voice-btn" id="voiceBtn" aria-label="Voice input">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                            <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                        </svg>
+                    </button>
                     <button class="send-btn" id="sendBtn" aria-label="Send message">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="transform: rotate(-45deg) translate(1px, -1px); transform-origin: center;">
                             <path d="M3.478 2.405a.75.75 0 0 0-.926.94l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.405Z"/>
@@ -1051,12 +1085,15 @@ class ConcyWidget {
       container: document.getElementById('chatbotContainer'),
       input: document.getElementById('chatInput'),
       sendBtn: document.getElementById('sendBtn'),
+      voiceBtn: document.getElementById('voiceBtn'),
       messages: document.getElementById('chatMessages'),
       newChatBtn: document.getElementById('newChatBtn'),
       thinkingToggle: document.getElementById('thinkingToggle'),
       welcomeScreen: document.getElementById('welcomeScreen'),
       welcomeGreeting: document.getElementById('welcomeGreeting')
     };
+    this.isRecording = false;
+    this.recognition = null;
     this.init();
   }
   getTimeBasedGreeting() {
@@ -1067,6 +1104,7 @@ class ConcyWidget {
   }
   async init() {
     this.bindEvents();
+    this.setupSpeechRecognition();
     this.startNewSession();
     document.body.style.overflow = 'hidden';
     setTimeout(() => { this.elements.input.focus(); }, 300);
@@ -1074,6 +1112,7 @@ class ConcyWidget {
   bindEvents() {
     this.elements.newChatBtn.addEventListener('click', () => this.handleNewChat());
     this.elements.sendBtn.addEventListener('click', () => this.sendMessage());
+    this.elements.voiceBtn.addEventListener('click', () => this.toggleVoice());
     this.elements.input.addEventListener('keypress', (e) => { if (e.key === 'Enter') this.sendMessage(); });
     this.elements.messages.addEventListener('click', (e) => this.handleOptionClick(e));
     // Quick question click handler
@@ -1082,6 +1121,40 @@ class ConcyWidget {
         this.handleQuickQuestion(e.target);
       }
     });
+  }
+  setupSpeechRecognition() {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { this.elements.voiceBtn.style.display = 'none'; return; }
+    this.recognition = new SR();
+    this.recognition.lang = 'en-AU';
+    this.recognition.interimResults = true;
+    this.recognition.continuous = false;
+    this.recognition.onresult = (e) => {
+      const transcript = Array.from(e.results).map(r => r[0].transcript).join('');
+      this.elements.input.value = transcript;
+      if (e.results[0].isFinal) {
+        this.stopVoice();
+        this.sendMessage();
+      }
+    };
+    this.recognition.onend = () => this.stopVoice();
+    this.recognition.onerror = () => this.stopVoice();
+  }
+  toggleVoice() {
+    if (!this.recognition) return;
+    if (this.isRecording) {
+      this.recognition.stop();
+    } else {
+      this.recognition.start();
+      this.isRecording = true;
+      this.elements.voiceBtn.classList.add('recording');
+      this.elements.input.placeholder = 'Listening...';
+    }
+  }
+  stopVoice() {
+    this.isRecording = false;
+    this.elements.voiceBtn.classList.remove('recording');
+    this.elements.input.placeholder = 'Ask a question, I am here to help...';
   }
   startNewSession() {
     this.sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substring(2, 11);
