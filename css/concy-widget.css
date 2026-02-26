@@ -1,0 +1,582 @@
+/**
+ * CONCY CHAT WIDGET STYLES
+ * Extracted from index.html styles.css
+ * Preserves exact UI/UX from original
+ */
+
+@import url('./variables.css');
+
+/* ===== Widget Root Scoping ===== */
+#concy-widget-root {
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+
+#concy-widget-root *,
+#concy-widget-root *::before,
+#concy-widget-root *::after {
+  box-sizing: border-box;
+}
+
+#concy-widget-root img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+#concy-widget-root button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* ===== Chat Hook Speech Bubble ===== */
+#concy-widget-root .chat-hook {
+  position: fixed;
+  bottom: 95px;
+  right: 20px;
+  background-color: var(--color-cream);
+  color: var(--color-text-dark);
+  padding: var(--spacing-sm) var(--spacing-md);
+  padding-right: var(--spacing-xl);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  z-index: 999;
+  max-width: 220px;
+  opacity: 0;
+  transform: translateY(10px) scale(0.9);
+  animation: hookAppear 0.5s ease 1.5s forwards;
+}
+
+#concy-widget-root .chat-hook p {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+#concy-widget-root .chat-hook .hook-close {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  font-size: 1.2rem;
+  color: var(--color-text-dark);
+  opacity: 0.5;
+  padding: 0;
+  line-height: 1;
+}
+
+#concy-widget-root .chat-hook .hook-close:hover {
+  opacity: 1;
+}
+
+#concy-widget-root .hook-arrow {
+  position: absolute;
+  bottom: -8px;
+  right: 28px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid var(--color-cream);
+}
+
+#concy-widget-root .chat-hook.hidden {
+  display: none;
+}
+
+@keyframes hookAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===== Chatbot Trigger Button ===== */
+#concy-widget-root .chatbot-trigger {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-cream);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#concy-widget-root .chatbot-trigger:hover {
+  transform: scale(1.08);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+}
+
+#concy-widget-root .chatbot-trigger:active {
+  transform: scale(0.95);
+}
+
+#concy-widget-root .chatbot-avatar {
+  width: 48px;
+  height: 48px;
+}
+
+#concy-widget-root .concy-cat {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}
+
+/* ===== Chatbot Container ===== */
+#concy-widget-root .chatbot-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--color-primary);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: var(--radius-lg);
+  border: 2px solid rgba(245, 230, 211, 0.4);
+  overflow: hidden;
+}
+
+#concy-widget-root .chatbot-container.active {
+  transform: translateY(0);
+}
+
+/* Chat Header */
+#concy-widget-root .chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md);
+  background-color: var(--color-primary-dark);
+  border-bottom: 1px solid rgba(245, 230, 211, 0.1);
+}
+
+#concy-widget-root .chat-back,
+#concy-widget-root .chat-menu {
+  color: var(--color-cream);
+  padding: var(--spacing-sm);
+}
+
+#concy-widget-root .chat-brand {
+  text-align: center;
+}
+
+#concy-widget-root .chat-logo {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-style: italic;
+  display: block;
+  line-height: 1;
+}
+
+#concy-widget-root .chat-brand-name {
+  font-family: var(--font-serif);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  display: block;
+  margin-top: 2px;
+  opacity: 0.8;
+}
+
+/* New Chat Button */
+#concy-widget-root .new-chat-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--color-cream);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(245, 230, 211, 0.4);
+  background: transparent;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+#concy-widget-root .new-chat-btn:hover {
+  background-color: rgba(245, 230, 211, 0.15);
+  border-color: var(--color-cream);
+}
+
+#concy-widget-root .new-chat-btn:active {
+  transform: scale(0.95);
+}
+
+#concy-widget-root .new-chat-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Quick Actions */
+#concy-widget-root .quick-actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background-color: var(--color-primary-dark);
+}
+
+#concy-widget-root .action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--color-cream);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(245, 230, 211, 0.3);
+  background: transparent;
+  transition: all 0.2s ease;
+  min-width: 70px;
+}
+
+#concy-widget-root .action-btn:hover {
+  background-color: rgba(245, 230, 211, 0.1);
+  border-color: var(--color-cream);
+}
+
+#concy-widget-root .action-btn span {
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+/* Chat Messages */
+#concy-widget-root .chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+#concy-widget-root .message {
+  display: flex;
+  gap: var(--spacing-sm);
+  max-width: 85%;
+}
+
+#concy-widget-root .bot-message {
+  align-self: flex-start;
+}
+
+#concy-widget-root .user-message {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+#concy-widget-root .message-avatar {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  background-color: var(--color-cream);
+  border-radius: var(--radius-full);
+  padding: 4px;
+}
+
+/* Spacer for continuation bubbles (no avatar shown) */
+#concy-widget-root .message-avatar-spacer {
+  width: 36px;
+  height: 0;
+  flex-shrink: 0;
+}
+
+#concy-widget-root .concy-cat-small {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}
+
+#concy-widget-root .message-content {
+  display: flex;
+  flex-direction: column;
+}
+
+#concy-widget-root .user-message .message-content {
+  align-items: flex-end;
+}
+
+#concy-widget-root .message-bubble {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-lg);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+#concy-widget-root .bot-message .message-bubble {
+  background-color: rgba(245, 230, 211, 0.12);
+  color: var(--color-cream);
+  border: 1px solid rgba(245, 230, 211, 0.3);
+  border-bottom-left-radius: var(--spacing-xs);
+}
+
+#concy-widget-root .user-message .message-bubble {
+  background-color: var(--color-cream);
+  color: var(--color-text-dark);
+  border: 1px solid var(--color-cream-dark);
+  border-bottom-right-radius: var(--spacing-xs);
+}
+
+#concy-widget-root .message-time {
+  font-size: 0.7rem;
+  opacity: 0.6;
+  margin-top: var(--spacing-xs);
+  padding: 0 var(--spacing-xs);
+}
+
+/* Time Slots */
+#concy-widget-root .time-slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+}
+
+#concy-widget-root .time-slot {
+  padding: var(--spacing-xs) var(--spacing-md);
+  background-color: var(--color-cream);
+  color: var(--color-text-dark);
+  border-radius: var(--radius-lg);
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+#concy-widget-root .time-slot:hover {
+  background-color: var(--color-cream-dark);
+  transform: scale(1.02);
+}
+
+#concy-widget-root .time-slot:active {
+  transform: scale(0.98);
+}
+
+/* Restaurant Options */
+#concy-widget-root .restaurant-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+}
+
+#concy-widget-root .restaurant-option {
+  padding: var(--spacing-xs) var(--spacing-md);
+  background-color: var(--color-cream);
+  color: var(--color-text-dark);
+  border-radius: var(--radius-lg);
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+#concy-widget-root .restaurant-option:hover {
+  background-color: var(--color-cream-dark);
+  transform: scale(1.02);
+}
+
+#concy-widget-root .restaurant-option:active {
+  transform: scale(0.98);
+}
+
+/* Chat Input */
+#concy-widget-root .chat-input-container {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background-color: var(--color-primary);
+  border-top: 1px solid rgba(245, 230, 211, 0.1);
+}
+
+#concy-widget-root .attach-btn {
+  color: var(--color-cream);
+  opacity: 0.7;
+  padding: var(--spacing-sm);
+  transition: opacity 0.2s ease;
+}
+
+#concy-widget-root .attach-btn:hover {
+  opacity: 1;
+}
+
+#concy-widget-root .chat-input {
+  flex: 1;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-primary-light);
+  border: 1px solid rgba(245, 230, 211, 0.2);
+  border-radius: var(--radius-lg);
+  color: var(--color-cream);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+#concy-widget-root .chat-input::placeholder {
+  color: var(--color-cream);
+  opacity: 0.5;
+}
+
+#concy-widget-root .chat-input:focus {
+  border-color: var(--color-cream);
+}
+
+#concy-widget-root .send-btn {
+  width: 44px;
+  height: 44px;
+  background-color: var(--color-cream);
+  color: var(--color-primary);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+#concy-widget-root .send-btn:hover {
+  background-color: var(--color-cream-dark);
+  transform: scale(1.05);
+}
+
+#concy-widget-root .send-btn:active {
+  transform: scale(0.95);
+}
+
+/* Powered By */
+#concy-widget-root .powered-by {
+  text-align: center;
+  padding: var(--spacing-sm);
+  font-size: 0.75rem;
+  opacity: 0.6;
+  background-color: var(--color-cream);
+  color: var(--color-text-dark);
+}
+
+/* ===== Desktop Styles ===== */
+@media (min-width: 768px) {
+  #concy-widget-root .chatbot-container {
+    top: auto;
+    left: auto;
+    right: 20px;
+    bottom: 100px;
+    width: 400px;
+    height: 600px;
+    max-height: calc(100vh - 140px);
+    border-radius: 24px;
+    border: 2px solid rgba(245, 230, 211, 0.5);
+    box-shadow: var(--shadow-lg);
+    transform: scale(0.9) translateY(20px);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  #concy-widget-root .chatbot-container.active {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+/* ===== Animations ===== */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+#concy-widget-root .chatbot-trigger {
+  animation: bounce 2s ease-in-out infinite;
+}
+
+#concy-widget-root .chatbot-trigger:hover {
+  animation: none;
+}
+
+/* Message animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#concy-widget-root .message {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Typing indicator */
+#concy-widget-root .typing-indicator {
+  display: flex;
+  gap: 4px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: rgba(245, 230, 211, 0.12);
+  border: 1px solid rgba(245, 230, 211, 0.3);
+  border-radius: var(--radius-lg);
+  width: fit-content;
+}
+
+#concy-widget-root .typing-indicator span {
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-cream);
+  border-radius: var(--radius-full);
+  opacity: 0.4;
+  animation: typing 1.4s ease-in-out infinite;
+}
+
+#concy-widget-root .typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+#concy-widget-root .typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* Hide scrollbar but keep functionality */
+#concy-widget-root .chat-messages::-webkit-scrollbar {
+  width: 4px;
+}
+
+#concy-widget-root .chat-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#concy-widget-root .chat-messages::-webkit-scrollbar-thumb {
+  background-color: rgba(245, 230, 211, 0.3);
+  border-radius: 4px;
+}
+
+/* Safe area for notched phones */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  #concy-widget-root .chat-input-container {
+    padding-bottom: calc(var(--spacing-md) + env(safe-area-inset-bottom));
+  }
+
+  #concy-widget-root .chatbot-trigger {
+    bottom: calc(20px + env(safe-area-inset-bottom));
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "env": {
+    "BACKEND_URL": "http://104.225.141.38:8083"
+  },
+  "rewrites": [
+    {
+      "source": "/api/v1/chat",
+      "destination": "/api/chat"
+    }
+  ]
+}

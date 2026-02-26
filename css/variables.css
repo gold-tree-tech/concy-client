@@ -1,0 +1,35 @@
+/* ===== CSS Variables ===== */
+:root {
+    /* Colors */
+    --color-primary: #0F3D3E;
+    --color-primary-light: #1A4A4B;
+    --color-primary-dark: #0A2E2F;
+    --color-cream: #F5E6D3;
+    --color-cream-dark: #E8D5C0;
+    --color-cat-orange: #D4956A;
+    --color-cat-light: #FFCEB4;
+    --color-text-dark: #2D2D2D;
+    --color-accent: #87CEEB;
+
+    /* Typography */
+    --font-serif: 'Cormorant Garamond', Georgia, serif;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+    /* Spacing */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+
+    /* Border Radius */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-full: 50%;
+
+    /* Shadows */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.25);
+}
