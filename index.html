@@ -1188,6 +1188,8 @@ class ConcyWidget {
     await this.sendMessageToBackend(message);
   }
   async sendMessageToBackend(message, fallbackResponse = null) {
+    // Remove all previous suggestion chips
+    this.elements.messages.querySelectorAll('.suggestion-chips').forEach(el => el.remove());
     // Prevent concurrent requests
     if (this.isSending) {
       console.warn('[Widget] Message already being sent, ignoring duplicate request');
