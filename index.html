@@ -6,7 +6,7 @@
     <title>Liquid & Larder - AI Concierge</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         /* ===== CSS Variables - Liquid & Larder Brand Colors ===== */
         :root {
@@ -100,20 +100,39 @@
           display: flex;
           flex-direction: row;
           align-items: center;
-          gap: 8px;
+          gap: 12px;
+        }
+        #concy-widget-root .chat-logo-box {
+          width: 48px;
+          height: 48px;
+          background: #F0EBE3;
+          border-radius: 14px;
+          flex-shrink: 0;
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
         #concy-widget-root .chat-logo-img {
-          height: 28px;
-          width: auto;
+          width: 170%;
+          height: 170%;
+          max-width: none;
           object-fit: contain;
-          opacity: 0.9;
+          /* dark teal logo - no filter needed */
+        }
+        #concy-widget-root .chat-brand-info {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 4px;
         }
         #concy-widget-root .chat-brand-name {
-          font-family: var(--font-serif);
-          font-size: 1.05rem;
-          letter-spacing: 0.1em;
+          font-family: 'Playfair Display', var(--font-serif);
+          font-size: 1.1rem;
+          letter-spacing: 0.08em;
           font-weight: 400;
           color: var(--color-text-primary);
+          line-height: 1;
         }
         #concy-widget-root .new-chat-btn {
           display: flex;
@@ -142,7 +161,7 @@
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          padding: var(--spacing-2xl) var(--spacing-lg) var(--spacing-lg);
+          padding: var(--spacing-xl) var(--spacing-lg) var(--spacing-lg);
           flex: 1;
           overflow-y: auto;
           text-align: center;
@@ -152,18 +171,31 @@
           margin-bottom: var(--spacing-xl);
         }
         #concy-widget-root .welcome-greeting {
-          font-family: var(--font-serif);
-          font-size: 2.8rem;
-          font-weight: 500;
+          font-family: 'Playfair Display', var(--font-serif);
+          font-size: 2rem;
+          font-weight: 400;
           color: var(--color-text-primary);
           margin-bottom: var(--spacing-md);
           letter-spacing: -0.02em;
           line-height: 1.1;
         }
+        #concy-widget-root .concierge-badge {
+          display: inline-block;
+          font-family: var(--font-primary);
+          font-size: 0.6rem;
+          font-weight: 500;
+          letter-spacing: 0.04em;
+          color: var(--color-text-primary);
+          background: transparent;
+          border: 1px solid rgba(15, 61, 62, 0.3);
+          padding: 2px 8px;
+          border-radius: 4px;
+          line-height: 1.4;
+        }
         #concy-widget-root .welcome-subtitle {
-          font-family: var(--font-serif);
+          font-family: var(--font-primary);
           font-size: 1.05rem;
-          font-style: italic;
+          font-style: normal;
           font-weight: 400;
           color: var(--color-text-secondary);
           line-height: 1.6;
@@ -176,59 +208,45 @@
           text-align: left;
         }
         #concy-widget-root .quick-questions-label {
-          font-family: var(--font-serif);
-          font-size: 0.85rem;
-          font-style: italic;
-          font-weight: 400;
-          letter-spacing: 0.06em;
-          color: var(--color-bronze);
-          opacity: 0.9;
-          border-left: 2px solid var(--color-bronze);
-          padding-left: var(--spacing-sm);
+          font-family: var(--font-primary);
+          font-size: 0.75rem;
+          font-style: normal;
+          font-weight: 600;
+          letter-spacing: 0.08em;
+          color: var(--color-text-secondary);
+          border-left: none;
+          padding-left: 0;
+          padding-bottom: var(--spacing-sm);
+          border-bottom: 1.5px solid var(--color-surface-subtle);
           margin-bottom: var(--spacing-md);
         }
         #concy-widget-root .quick-questions-list {
           display: flex;
           flex-direction: column;
-          gap: 8px;
+          gap: 0;
         }
         #concy-widget-root .quick-question-item {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
+          display: block;
           width: 100%;
           text-align: left;
-          padding: 14px var(--spacing-md);
+          padding: 12px 0;
           font-size: 0.875rem;
           color: var(--color-text-primary);
-          background: var(--color-surface-elevated);
-          border: 1px solid var(--color-surface-subtle);
-          border-radius: 12px;
+          background: none;
+          border: none;
+          border-bottom: 1px solid var(--color-surface-subtle);
+          border-radius: 0;
           cursor: pointer;
-          transition: all 0.2s ease;
+          transition: color 0.2s ease;
           line-height: 1.5;
           font-family: var(--font-primary);
-          box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+          box-shadow: none;
         }
-        #concy-widget-root .quick-question-item::after {
-          content: '→';
-          opacity: 0;
-          transform: translateX(-4px);
-          transition: all 0.2s ease;
-          color: var(--color-accent);
-          font-size: 1rem;
-          flex-shrink: 0;
-          margin-left: 8px;
+        #concy-widget-root .quick-question-item:last-child {
+          border-bottom: none;
         }
         #concy-widget-root .quick-question-item:hover {
-          background: var(--color-surface-elevated);
-          border-color: rgba(15, 61, 62, 0.2);
-          box-shadow: 0 3px 12px rgba(0, 0, 0, 0.09);
-          transform: translateY(-1px);
-        }
-        #concy-widget-root .quick-question-item:hover::after {
-          opacity: 0.6;
-          transform: translateX(0);
+          color: var(--color-primary);
         }
 
         /* ===== Chat Messages ===== */
@@ -590,11 +608,11 @@
         /* ===== Voice Button ===== */
         #concy-widget-root .voice-btn {
           position: absolute;
-          right: 46px;
+          right: 48px;
           top: 50%;
           transform: translateY(-50%);
-          width: 38px;
-          height: 38px;
+          width: 42px;
+          height: 42px;
           background: transparent;
           color: #999;
           border-radius: 50%;
@@ -647,12 +665,13 @@
         #concy-widget-root .powered-by {
           text-align: center;
           padding: 6px var(--spacing-sm);
-          font-family: var(--font-sans);
-          font-size: 0.68rem;
+          font-family: var(--font-primary);
+          font-style: normal;
+          font-size: 0.7rem;
           color: var(--color-text-secondary);
-          opacity: 0.65;
+          opacity: 0.5;
           background-color: var(--color-surface);
-          letter-spacing: 0.05em;
+          letter-spacing: 0.04em;
         }
 
         /* ===== Typing Indicator ===== */
@@ -666,9 +685,9 @@
           width: fit-content;
         }
         #concy-widget-root .typing-label {
-          font-family: var(--font-serif);
+          font-family: var(--font-primary);
           font-size: 0.8rem;
-          font-style: italic;
+          font-style: normal;
           color: var(--color-text-secondary);
           opacity: 0.7;
           margin-top: 4px;
@@ -814,6 +833,68 @@
               border-radius: 8px;
             }
         }
+
+        /* ===== Complaint Form Card ===== */
+        #concy-widget-root .complaint-form {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          background: var(--color-cream);
+          border-radius: var(--radius-md);
+          padding: var(--spacing-md);
+          border: 1px solid rgba(139, 111, 71, 0.18);
+          margin-top: var(--spacing-sm);
+        }
+        #concy-widget-root .complaint-form-intro {
+          font-size: 0.85rem;
+          color: var(--color-text-secondary);
+          margin: 0;
+          line-height: 1.5;
+        }
+        #concy-widget-root .complaint-form input {
+          border: 1px solid rgba(0, 0, 0, 0.12);
+          border-radius: var(--radius-sm);
+          padding: 10px 12px;
+          font-size: 0.875rem;
+          font-family: inherit;
+          background: white;
+          outline: none;
+          transition: border-color 0.2s ease;
+          color: var(--color-text-primary);
+        }
+        #concy-widget-root .complaint-form input:focus {
+          border-color: var(--color-primary);
+        }
+        #concy-widget-root .complaint-form button {
+          background: var(--color-primary);
+          color: white;
+          border-radius: var(--radius-sm);
+          padding: 11px 16px;
+          font-size: 0.875rem;
+          font-weight: 500;
+          letter-spacing: 0.01em;
+          transition: background 0.2s ease;
+          cursor: pointer;
+        }
+        #concy-widget-root .complaint-form button:hover {
+          background: var(--color-primary-dark);
+        }
+        #concy-widget-root .complaint-form button:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+        #concy-widget-root .complaint-form-success {
+          font-size: 0.875rem;
+          color: var(--color-primary);
+          line-height: 1.6;
+          margin: 0;
+          padding: var(--spacing-xs) 0;
+        }
+        #concy-widget-root .complaint-form-error {
+          font-size: 0.8rem;
+          color: #c0392b;
+          margin: 0;
+        }
     </style>
 </head>
 <body>
@@ -822,8 +903,13 @@
         <div class="chatbot-container active" id="chatbotContainer">
             <div class="chat-header">
                 <div class="chat-brand">
-                    <img src="./assets/ll-logo.png" alt="LL" class="chat-logo-img">
-                    <span class="chat-brand-name">LIQUID & LARDER</span>
+                    <div class="chat-logo-box">
+                        <img src="./assets/ll-logo-dark.png" alt="LL" class="chat-logo-img">
+                    </div>
+                    <div class="chat-brand-info">
+                        <span class="chat-brand-name">LIQUID & LARDER</span>
+                        <span class="concierge-badge">AI Concierge Beta</span>
+                    </div>
                 </div>
                 <button class="new-chat-btn" id="newChatBtn" aria-label="New chat">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -836,34 +922,7 @@
             <!-- Welcome Screen -->
             <div id="welcomeScreen" class="welcome-screen">
                 <div class="welcome-art">
-                    <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <defs>
-                        <mask id="c-mask-welcome">
-                          <circle cx="100" cy="100" r="75" fill="white"/>
-                          <circle cx="100" cy="100" r="45" fill="black"/>
-                          <rect x="100" y="75" width="80" height="50" fill="black"/>
-                        </mask>
-                        <path id="lens-welcome" d="M-60,0 C-40,-1.7 -20,-10.1 0,-10.1 C20,-10.1 40,-1.7 60,0 C40,1.7 20,10.1 0,10.1 C-20,10.1 -40,1.7 -60,0 Z" fill="#0F3D3E"/>
-                      </defs>
-                      <g mask="url(#c-mask-welcome)">
-                        <line x1="0" y1="35" x2="200" y2="35" stroke="#0F3D3E" stroke-width="3.4" stroke-linecap="round"/>
-                        <use href="#lens-welcome"><animateTransform attributeName="transform" type="translate" values="-12,35; 212,35; -12,35" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1; 0.4 0 0.6 1" calcMode="spline" dur="4s" repeatCount="indefinite" begin="0s"/></use>
-                        <line x1="0" y1="55" x2="200" y2="55" stroke="#0F3D3E" stroke-width="3.4" stroke-linecap="round"/>
-                        <use href="#lens-welcome"><animateTransform attributeName="transform" type="translate" values="-12,55; 212,55; -12,55" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1; 0.4 0 0.6 1" calcMode="spline" dur="4s" repeatCount="indefinite" begin="0.15s"/></use>
-                        <line x1="0" y1="75" x2="200" y2="75" stroke="#0F3D3E" stroke-width="3.4" stroke-linecap="round"/>
-                        <use href="#lens-welcome"><animateTransform attributeName="transform" type="translate" values="-12,75; 212,75; -12,75" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1; 0.4 0 0.6 1" calcMode="spline" dur="4s" repeatCount="indefinite" begin="0.3s"/></use>
-                        <line x1="0" y1="95" x2="200" y2="95" stroke="#0F3D3E" stroke-width="3.4" stroke-linecap="round"/>
-                        <use href="#lens-welcome"><animateTransform attributeName="transform" type="translate" values="-12,95; 212,95; -12,95" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1; 0.4 0 0.6 1" calcMode="spline" dur="4s" repeatCount="indefinite" begin="0.4s"/></use>
-                        <line x1="0" y1="115" x2="200" y2="115" stroke="#0F3D3E" stroke-width="3.4" stroke-linecap="round"/>
-                        <use href="#lens-welcome"><animateTransform attributeName="transform" type="translate" values="-12,115; 212,115; -12,115" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1; 0.4 0 0.6 1" calcMode="spline" dur="4s" repeatCount="indefinite" begin="0.4s"/></use>
-                        <line x1="0" y1="135" x2="200" y2="135" stroke="#0F3D3E" stroke-width="3.4" stroke-linecap="round"/>
-                        <use href="#lens-welcome"><animateTransform attributeName="transform" type="translate" values="-12,135; 212,135; -12,135" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1; 0.4 0 0.6 1" calcMode="spline" dur="4s" repeatCount="indefinite" begin="0.3s"/></use>
-                        <line x1="0" y1="155" x2="200" y2="155" stroke="#0F3D3E" stroke-width="3.4" stroke-linecap="round"/>
-                        <use href="#lens-welcome"><animateTransform attributeName="transform" type="translate" values="-12,155; 212,155; -12,155" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1; 0.4 0 0.6 1" calcMode="spline" dur="4s" repeatCount="indefinite" begin="0.15s"/></use>
-                        <line x1="0" y1="175" x2="200" y2="175" stroke="#0F3D3E" stroke-width="3.4" stroke-linecap="round"/>
-                        <use href="#lens-welcome"><animateTransform attributeName="transform" type="translate" values="-12,175; 212,175; -12,175" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1; 0.4 0 0.6 1" calcMode="spline" dur="4s" repeatCount="indefinite" begin="0s"/></use>
-                      </g>
-                    </svg>
+                    <img src="./assets/concy-logo.png" alt="Concy" width="200">
                 </div>
                 <h1 class="welcome-greeting" id="welcomeGreeting">Good Evening</h1>
                 <p class="welcome-subtitle">I am Liquid and Larder's concierge,<br>how can I help you today?</p>
@@ -898,7 +957,7 @@
                         <span class="toggle-slider"></span>
                     </label>
                     <button class="voice-btn" id="voiceBtn" aria-label="Voice input">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
                             <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
                         </svg>
@@ -991,12 +1050,12 @@ class ConcyAPI {
                       window.location.hostname === '';
     this.baseUrl = isLocalDev ? `${config.api.backendUrl}/api/v1` : '/api/v1';
   }
-  async sendMessage(message, sessionId, shouldThink, onChunk, onComplete, onClarification) {
+  async sendMessage(message, sessionId, shouldThink, onChunk, onComplete, onClarification, onComplaintForm) {
     try {
       const response = await fetch(`${this.baseUrl}${this.config.api.endpoints.chat}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: message, session_id: sessionId, user_id: null, should_think: shouldThink })
+        body: JSON.stringify({ question: message, session_id: sessionId, user_id: null, mode: shouldThink ? 'deep' : 'opt' })
       });
 
       if (!response.ok) throw new Error('API request failed');
@@ -1035,6 +1094,8 @@ class ConcyAPI {
               } else if (currentEvent === 'suggestions' && data?.suggestions && Array.isArray(data.suggestions)) {
                 if (onComplete) onComplete(cleanedFullText || fullResponse, data.suggestions);
                 return { response: cleanedFullText || fullResponse, suggestions: data.suggestions };
+              } else if (currentEvent === 'complaint_form') {
+                if (onComplaintForm) onComplaintForm();
               } else if (currentEvent === 'error') {
                 throw new Error(data?.message || 'Stream error');
               } else if (currentEvent === 'done') {
@@ -1093,6 +1154,10 @@ class ConcyWidget {
     };
     this.isRecording = false;
     this.recognition = null;
+    this.complaintFormShown = false;
+    this.lastUserMessage = '';
+    this._ttsAudio = null;
+    this._ttsActiveBtn = null;
     this.init();
   }
   getTimeBasedGreeting() {
@@ -1158,6 +1223,10 @@ class ConcyWidget {
   startNewSession() {
     this.sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substring(2, 11);
     this.elements.messages.innerHTML = '';
+    this.complaintFormShown = false;
+    this.lastUserMessage = '';
+    this._ttsAudio = null;
+    this._ttsActiveBtn = null;
     // Show welcome screen, hide chat messages
     if (this.elements.welcomeScreen) this.elements.welcomeScreen.classList.remove('hidden');
     if (this.elements.messages) this.elements.messages.classList.add('hidden');
@@ -1188,8 +1257,6 @@ class ConcyWidget {
     await this.sendMessageToBackend(message);
   }
   async sendMessageToBackend(message, fallbackResponse = null) {
-    // Remove all previous suggestion chips
-    this.elements.messages.querySelectorAll('.suggestion-chips').forEach(el => el.remove());
     // Prevent concurrent requests
     if (this.isSending) {
       console.warn('[Widget] Message already being sent, ignoring duplicate request');
@@ -1262,8 +1329,16 @@ class ConcyWidget {
           this.addClarificationMessage(questions, message);
         };
 
+        const onComplaintForm = () => {
+          if (!this.complaintFormShown) {
+            this.complaintFormShown = true;
+            setTimeout(() => this.renderComplaintForm(), 0);
+          }
+        };
+
+        this.lastUserMessage = message;
         const shouldThink = this.elements.thinkingToggle ? this.elements.thinkingToggle.checked : false;
-        await this.api.sendMessage(message, this.sessionId, shouldThink, onChunk, onComplete, onClarification);
+        await this.api.sendMessage(message, this.sessionId, shouldThink, onChunk, onComplete, onClarification, onComplaintForm);
         this.hideTypingIndicator();
       } catch (error) {
         this.hideTypingIndicator();
@@ -1375,6 +1450,9 @@ class ConcyWidget {
       <button class="message-action-btn" data-action="thumbdown" title="Bad response">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 14V2"/><path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z"/></svg>
       </button>
+      <button class="message-action-btn tts-btn" data-action="tts" title="Read aloud">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+      </button>
     </div>`;
   }
   createSuggestionChips(chips) {
@@ -1447,41 +1525,46 @@ class ConcyWidget {
           oppositeBtn?.classList.remove('active');
         }
       }
+      if (action === 'tts' && messageDiv) {
+        this.handleTTS(actionBtn, messageDiv);
+      }
       return;
     }
-    if (e.target.classList.contains('clarification-option')) {
+    const clarificationBtn = e.target.closest('.clarification-option');
+    if (clarificationBtn) {
       e.preventDefault();
-      const query = e.target.dataset.query;
+      const query = clarificationBtn.dataset.query;
       if (query) {
-        const optionsDiv = e.target.closest('.clarification-options');
+        const optionsDiv = clarificationBtn.closest('.clarification-options');
         if (optionsDiv) optionsDiv.querySelectorAll('button').forEach(b => b.disabled = true);
         this.addMessage(query, 'user');
         await this.sendMessageToBackend(query);
       }
       return;
     }
-    if (e.target.classList.contains('suggestion-chip')) {
+    const chip = e.target.closest('.suggestion-chip');
+    if (chip) {
       e.preventDefault();
-      const query = e.target.dataset.query;
+      const query = chip.dataset.query;
       if (query) {
-        // Only remove the chips container that contains the clicked chip
-        const chipContainer = e.target.closest('.suggestion-chips');
+        const chipContainer = chip.closest('.suggestion-chips');
         if (chipContainer) chipContainer.remove();
-
         this.addMessage(query, 'user');
         await this.sendMessageToBackend(query);
       }
       return;
     }
 
-    if (e.target.classList.contains('time-slot')) {
-      const time = e.target.dataset.time;
+    const timeSlot = e.target.closest('.time-slot');
+    if (timeSlot) {
+      const time = timeSlot.dataset.time;
       this.addMessage(`${time} would be perfect!`, 'user');
       const fallback = `Excellent choice! I've noted ${time} for your reservation. Could you provide your name and contact number to confirm?`;
       await this.sendMessageToBackend(`I'd like to book for ${time}`, fallback);
     }
-    if (e.target.classList.contains('restaurant-option')) {
-      const restaurant = e.target.dataset.restaurant;
+    const restaurantOpt = e.target.closest('.restaurant-option');
+    if (restaurantOpt) {
+      const restaurant = restaurantOpt.dataset.restaurant;
       this.addMessage(`I'd like to book at ${restaurant}`, 'user');
       const fallback = `Great choice! ${restaurant} is wonderful. How many guests will be joining you?`;
       await this.sendMessageToBackend(`I'd like to book at ${restaurant}`, fallback);
@@ -1503,6 +1586,123 @@ class ConcyWidget {
   scrollToBottom() {
     if (this.elements.messages && this.elements.messages.scrollHeight) {
       this.elements.messages.scrollTop = this.elements.messages.scrollHeight;
+    }
+  }
+
+  renderComplaintForm() {
+    const card = document.createElement('div');
+    card.className = 'message bot-message';
+    card.id = 'concyComplaintCard';
+    card.innerHTML = `
+      <div class="message-content">
+        <div class="complaint-form" id="concyComplaintForm">
+          <p class="complaint-form-intro">To help us follow this up, please share your details:</p>
+          <input type="text" id="cfName" placeholder="Your name *" autocomplete="name">
+          <input type="tel" id="cfPhone" placeholder="Phone number *" autocomplete="tel">
+          <input type="text" id="cfRes" placeholder="Reservation # (optional)">
+          <button id="cfSubmit">Send to our team</button>
+          <p class="complaint-form-error" id="cfError" style="display:none"></p>
+        </div>
+      </div>`;
+    this.elements.messages.appendChild(card);
+    this.scrollToBottom();
+    document.getElementById('cfSubmit').addEventListener('click', () => this.handleComplaintSubmit());
+  }
+
+  async handleComplaintSubmit() {
+    const name = (document.getElementById('cfName')?.value || '').trim();
+    const phone = (document.getElementById('cfPhone')?.value || '').trim();
+    const res = (document.getElementById('cfRes')?.value || '').trim();
+    const errorEl = document.getElementById('cfError');
+    const submitBtn = document.getElementById('cfSubmit');
+
+    if (!name || !phone) {
+      errorEl.textContent = 'Please enter your name and phone number.';
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+    errorEl.style.display = 'none';
+
+    try {
+      const baseUrl = this.api.baseUrl;
+      const resp = await fetch(`${baseUrl}/complaint`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          session_id: this.sessionId,
+          name,
+          phone,
+          reservation_number: res || null,
+          complaint_text: this.lastUserMessage || '(no message recorded)',
+          venue: null,
+        }),
+      });
+      if (!resp.ok) {
+        let msg = 'Something went wrong. Please try again.';
+        try {
+          const body = await resp.json();
+          if (body?.detail) msg = Array.isArray(body.detail) ? body.detail.map(d => d.msg).join(', ') : body.detail;
+        } catch { /* ignore parse error */ }
+        throw new Error(msg);
+      }
+      document.getElementById('concyComplaintForm').innerHTML =
+        '<p class="complaint-form-success">Thank you — our team will be in touch with you soon. We\'re committed to making your next visit a much better one.</p>';
+    } catch (err) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send to our team';
+      errorEl.textContent = err.message || 'Something went wrong. Please try again.';
+      errorEl.style.display = 'block';
+    }
+  }
+
+  async handleTTS(btn, messageEl) {
+    // Stop any currently playing audio first
+    if (this._ttsAudio) {
+      this._ttsAudio.pause();
+      this._ttsAudio = null;
+      if (this._ttsActiveBtn) {
+        this._ttsActiveBtn.classList.remove('active');
+        this._ttsActiveBtn.title = 'Read aloud';
+      }
+      if (this._ttsActiveBtn === btn) {
+        this._ttsActiveBtn = null;
+        return; // toggled off
+      }
+      this._ttsActiveBtn = null;
+    }
+
+    const text = messageEl.querySelector('.message-bubble')?.innerText || '';
+    if (!text) return;
+
+    btn.classList.add('active');
+    btn.title = 'Loading...';
+
+    try {
+      const resp = await fetch('/api/v1/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text }),
+      });
+      if (!resp.ok) throw new Error('TTS request failed');
+      const blob = await resp.blob();
+      const url = URL.createObjectURL(blob);
+      this._ttsAudio = new Audio(url);
+      this._ttsActiveBtn = btn;
+      btn.title = 'Stop';
+      this._ttsAudio.play();
+      this._ttsAudio.onended = () => {
+        btn.classList.remove('active');
+        btn.title = 'Read aloud';
+        URL.revokeObjectURL(url);
+        this._ttsAudio = null;
+        this._ttsActiveBtn = null;
+      };
+    } catch (err) {
+      btn.classList.remove('active');
+      btn.title = 'Read aloud';
     }
   }
 }
