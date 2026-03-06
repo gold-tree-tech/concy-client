@@ -1642,8 +1642,8 @@ class ConcyWidget {
     errorEl.style.display = 'none';
 
     try {
-      const backendUrl = this.api.config.api.backendUrl;
-      const resp = await fetch(`${backendUrl}/api/v1/complaint`, {
+      const baseUrl = this.api.baseUrl;
+      const resp = await fetch(`${baseUrl}/complaint`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
