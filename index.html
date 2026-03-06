@@ -118,7 +118,6 @@
           height: 170%;
           max-width: none;
           object-fit: contain;
-          /* dark teal logo - no filter needed */
         }
         #concy-widget-root .chat-brand-info {
           display: flex;
@@ -131,7 +130,7 @@
           font-size: 1.1rem;
           letter-spacing: 0.08em;
           font-weight: 400;
-          color: var(--color-text-primary);
+          color: var(--color-primary);
           line-height: 1;
         }
         #concy-widget-root .new-chat-btn {
@@ -169,12 +168,20 @@
         #concy-widget-root .welcome-screen.hidden { display: none; }
         #concy-widget-root .welcome-art {
           margin-bottom: var(--spacing-xl);
+          flex-shrink: 0;
+          padding-top: 60px;
+        }
+        #concy-widget-root .welcome-art img {
+          width: 180px;
+          height: auto;
+          margin: 0 auto;
+          overflow: visible;
         }
         #concy-widget-root .welcome-greeting {
-          font-family: 'Playfair Display', var(--font-serif);
+          font-family: var(--font-primary);
           font-size: 2rem;
           font-weight: 400;
-          color: var(--color-text-primary);
+          color: var(--color-primary);
           margin-bottom: var(--spacing-md);
           letter-spacing: -0.02em;
           line-height: 1.1;
@@ -185,7 +192,7 @@
           font-size: 0.6rem;
           font-weight: 500;
           letter-spacing: 0.04em;
-          color: var(--color-text-primary);
+          color: var(--color-primary);
           background: transparent;
           border: 1px solid rgba(15, 61, 62, 0.3);
           padding: 2px 8px;
@@ -197,7 +204,7 @@
           font-size: 1.05rem;
           font-style: normal;
           font-weight: 400;
-          color: var(--color-text-secondary);
+          color: var(--color-primary);
           line-height: 1.6;
           margin-bottom: var(--spacing-xl);
           max-width: 320px;
@@ -213,7 +220,7 @@
           font-style: normal;
           font-weight: 600;
           letter-spacing: 0.08em;
-          color: var(--color-text-secondary);
+          color: var(--color-primary);
           border-left: none;
           padding-left: 0;
           padding-bottom: var(--spacing-sm);
@@ -231,7 +238,7 @@
           text-align: left;
           padding: 12px 0;
           font-size: 0.875rem;
-          color: var(--color-text-primary);
+          color: var(--color-primary);
           background: none;
           border: none;
           border-bottom: 1px solid var(--color-surface-subtle);
@@ -639,9 +646,9 @@
           right: 6px;
           top: 50%;
           transform: translateY(-50%);
-          width: 34px;
-          height: 34px;
-          background: #3C3C3C;
+          width: 40px;
+          height: 40px;
+          background: #4A4A4A;
           color: #FFFFFF;
           border-radius: 50%;
           border: none;
@@ -718,7 +725,7 @@
         /* ===== Mobile ===== */
         @media (max-width: 767px) {
             #concy-widget-root .chat-messages {
-              padding: var(--spacing-md) 20px 80px !important;
+              padding: var(--spacing-md) 20px 60px !important;
             }
             #concy-widget-root .message {
               max-width: 100% !important;
@@ -789,6 +796,10 @@
             }
             #concy-widget-root .welcome-greeting {
               font-size: 2.2rem;
+              margin-top: -10px;
+            }
+            #concy-widget-root .welcome-subtitle {
+              margin-top: -10px;
             }
             #concy-widget-root .suggestion-chip {
               font-size: 13px !important;
@@ -831,6 +842,9 @@
             #concy-widget-root .suggestion-chip {
               font-size: 14px;
               border-radius: 8px;
+            }
+            #concy-widget-root .welcome-screen {
+              margin-top: -80px;
             }
         }
 
@@ -930,14 +944,14 @@
                 <div class="quick-questions">
                     <div class="quick-questions-label">Quick questions</div>
                     <div class="quick-questions-list">
-                        <button class="quick-question-item" data-question="I am looking to book a dinner tonight, can you help me?">
-                            I am looking to book a dinner tonight, can you help me?
+                        <button class="quick-question-item" data-question="Can you help me book a dinner tonight?">
+                            Can you help me book a dinner tonight?
                         </button>
-                        <button class="quick-question-item" data-question="What establishments are in the Liquid &amp; Larder group?">
-                            What establishments are in the Liquid &amp; Larder group?
+                        <button class="quick-question-item" data-question="What venues are in the Liquid &amp; Larder group?">
+                            What venues are in the Liquid &amp; Larder group?
                         </button>
-                        <button class="quick-question-item" data-question="Which establishments are most suitable for larger groups?">
-                            Which establishments are most suitable for larger groups?
+                        <button class="quick-question-item" data-question="Which venues are most suitable for larger groups?">
+                            Which venues are most suitable for larger groups?
                         </button>
                         <button class="quick-question-item" data-question="I have a question about a menu">
                             I have a question about a menu
@@ -963,8 +977,9 @@
                         </svg>
                     </button>
                     <button class="send-btn" id="sendBtn" aria-label="Send message">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="transform: rotate(-45deg) translate(1px, -1px); transform-origin: center;">
-                            <path d="M3.478 2.405a.75.75 0 0 0-.926.94l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.405Z"/>
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 20L12 4l7 16-7-4-7 4z"/>
+                            <path d="M12 4v12"/>
                         </svg>
                     </button>
                 </div>
