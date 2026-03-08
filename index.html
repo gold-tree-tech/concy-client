@@ -1772,14 +1772,20 @@ class ConcyWidget {
   }
   createVenueCarousel(venues) {
     if (!venues.length) return '';
-    const origin = this.config.api.backendUrl || '';
+    const isLocalDev = window.location.protocol === 'file:' ||
+                       window.location.hostname === 'localhost' ||
+                       window.location.hostname === '127.0.0.1' ||
+                       window.location.hostname === '';
+    const imgBase = isLocalDev ? this.config.api.backendUrl : '';
     // Flatten all venue images into a single row
     const allImgs = venues.flatMap(venue =>
       venue.images.map(img => ({ ...img, venue: venue.venue }))
     );
     if (!allImgs.length) return '';
-    const imgs = allImgs.map((img, i) =>
-      `<img src="${origin}${encodeURI(img.url)}" alt="${img.alt || img.venue}" loading="lazy" data-idx="${i}" />`
+    const imgs = allImgs.map((img, i) => {
+      const src = isLocalDev ? `${imgBase}${encodeURI(img.url)}` : `/api/images?path=${encodeURIComponent(img.url)}`;
+      return `<img src="${src}" alt="${img.alt || img.venue}" loading="lazy" data-idx="${i}" />`;
+    }
     ).join('');
     const dots = allImgs.map((_, i) =>
       `<button class="vc-ind${i === 0 ? ' active' : ''}" data-idx="${i}"></button>`
