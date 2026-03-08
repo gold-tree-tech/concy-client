@@ -849,65 +849,317 @@
         }
 
         /* ===== Complaint Form Card ===== */
+        @keyframes cfSlideIn {
+          from { opacity: 0; transform: translateY(12px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
         #concy-widget-root .complaint-form {
           display: flex;
           flex-direction: column;
-          gap: 10px;
-          background: var(--color-cream);
+          gap: 14px;
+          background: linear-gradient(135deg, var(--color-cream) 0%, #f7efe3 100%);
           border-radius: var(--radius-md);
-          padding: var(--spacing-md);
-          border: 1px solid rgba(139, 111, 71, 0.18);
+          padding: 20px;
+          border: 1px solid rgba(139, 111, 71, 0.15);
+          box-shadow: 0 2px 12px rgba(139, 111, 71, 0.08);
           margin-top: var(--spacing-sm);
+          animation: cfSlideIn 0.35s var(--transition-smooth) both;
+        }
+        #concy-widget-root .complaint-form-header {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          margin-bottom: 2px;
+        }
+        #concy-widget-root .complaint-form-icon {
+          width: 36px;
+          height: 36px;
+          border-radius: var(--radius-full);
+          background: var(--color-primary);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+        #concy-widget-root .complaint-form-icon svg {
+          width: 18px;
+          height: 18px;
+        }
+        #concy-widget-root .complaint-form-title {
+          font-family: var(--font-serif);
+          font-size: 1.05rem;
+          font-weight: 600;
+          color: var(--color-primary);
+          margin: 0;
+          line-height: 1.3;
         }
         #concy-widget-root .complaint-form-intro {
-          font-size: 0.85rem;
+          font-size: 0.82rem;
           color: var(--color-text-secondary);
           margin: 0;
-          line-height: 1.5;
+          line-height: 1.55;
         }
-        #concy-widget-root .complaint-form input {
-          border: 1px solid rgba(0, 0, 0, 0.12);
+        #concy-widget-root .complaint-form .cf-field {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+        }
+        #concy-widget-root .complaint-form .cf-label {
+          font-size: 0.75rem;
+          font-weight: 500;
+          color: var(--color-text-secondary);
+          text-transform: uppercase;
+          letter-spacing: 0.04em;
+        }
+        #concy-widget-root .complaint-form .cf-label .cf-optional {
+          font-weight: 400;
+          text-transform: none;
+          letter-spacing: 0;
+          opacity: 0.7;
+        }
+        #concy-widget-root .complaint-form input,
+        #concy-widget-root .complaint-form textarea {
+          border: 1px solid rgba(0, 0, 0, 0.1);
           border-radius: var(--radius-sm);
           padding: 10px 12px;
           font-size: 0.875rem;
           font-family: inherit;
           background: white;
           outline: none;
-          transition: border-color 0.2s ease;
+          transition: border-color 0.2s ease, box-shadow 0.2s ease;
           color: var(--color-text-primary);
         }
-        #concy-widget-root .complaint-form input:focus {
-          border-color: var(--color-primary);
+        #concy-widget-root .complaint-form textarea {
+          resize: vertical;
+          min-height: 60px;
+          max-height: 120px;
+          line-height: 1.5;
         }
-        #concy-widget-root .complaint-form button {
+        #concy-widget-root .complaint-form input:focus,
+        #concy-widget-root .complaint-form textarea:focus {
+          border-color: var(--color-primary);
+          box-shadow: 0 0 0 3px rgba(15, 61, 62, 0.08);
+        }
+        #concy-widget-root .complaint-form input.cf-invalid {
+          border-color: #c0392b;
+          box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.08);
+        }
+        #concy-widget-root .complaint-form-actions {
+          display: flex;
+          gap: 10px;
+          margin-top: 2px;
+        }
+        #concy-widget-root .complaint-form button.cf-submit-btn {
+          flex: 1;
           background: var(--color-primary);
           color: white;
           border-radius: var(--radius-sm);
-          padding: 11px 16px;
+          padding: 12px 16px;
           font-size: 0.875rem;
           font-weight: 500;
           letter-spacing: 0.01em;
-          transition: background 0.2s ease;
+          transition: background 0.2s ease, transform 0.1s ease;
           cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
         }
-        #concy-widget-root .complaint-form button:hover {
+        #concy-widget-root .complaint-form button.cf-submit-btn:hover {
           background: var(--color-primary-dark);
         }
-        #concy-widget-root .complaint-form button:disabled {
-          opacity: 0.6;
+        #concy-widget-root .complaint-form button.cf-submit-btn:active {
+          transform: scale(0.98);
+        }
+        #concy-widget-root .complaint-form button.cf-submit-btn:disabled {
+          opacity: 0.65;
           cursor: not-allowed;
+          transform: none;
+        }
+        #concy-widget-root .complaint-form button.cf-dismiss-btn {
+          background: transparent;
+          color: var(--color-text-secondary);
+          border-radius: var(--radius-sm);
+          padding: 12px 14px;
+          font-size: 0.82rem;
+          transition: background 0.2s ease, color 0.2s ease;
+          cursor: pointer;
+        }
+        #concy-widget-root .complaint-form button.cf-dismiss-btn:hover {
+          background: rgba(0, 0, 0, 0.04);
+          color: var(--color-text-primary);
+        }
+        @keyframes cfSpin {
+          to { transform: rotate(360deg); }
+        }
+        #concy-widget-root .cf-spinner {
+          width: 16px;
+          height: 16px;
+          border: 2px solid rgba(255,255,255,0.3);
+          border-top-color: white;
+          border-radius: var(--radius-full);
+          animation: cfSpin 0.6s linear infinite;
+        }
+        @keyframes cfSuccessPop {
+          0%   { opacity: 0; transform: scale(0.9); }
+          60%  { transform: scale(1.02); }
+          100% { opacity: 1; transform: scale(1); }
         }
         #concy-widget-root .complaint-form-success {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          gap: 10px;
+          padding: 16px 8px;
+          animation: cfSuccessPop 0.4s var(--transition-smooth) both;
+        }
+        #concy-widget-root .complaint-form-success .cf-success-icon {
+          width: 44px;
+          height: 44px;
+          border-radius: var(--radius-full);
+          background: var(--color-accent-dim);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        #concy-widget-root .complaint-form-success .cf-success-icon svg {
+          width: 22px;
+          height: 22px;
+          color: var(--color-accent);
+        }
+        #concy-widget-root .complaint-form-success p {
           font-size: 0.875rem;
-          color: var(--color-primary);
+          color: var(--color-text-primary);
           line-height: 1.6;
           margin: 0;
-          padding: var(--spacing-xs) 0;
         }
         #concy-widget-root .complaint-form-error {
           font-size: 0.8rem;
           color: #c0392b;
           margin: 0;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+
+        /* ── Venue image carousel ──────────────────────────────── */
+        #concy-widget-root .venue-carousel {
+          position: relative;
+          width: 100%;
+          margin: 10px 0 6px;
+          border-radius: var(--radius-lg, 12px);
+          overflow: hidden;
+          background: var(--color-bg-tertiary, #f0ede6);
+        }
+        #concy-widget-root .vc-header {
+          padding: 8px 12px 4px;
+          font-family: var(--font-serif, 'Cormorant Garamond', serif);
+          font-size: 0.95rem;
+          font-weight: 600;
+          color: var(--color-text-primary, #0F3D3E);
+          letter-spacing: 0.02em;
+        }
+        #concy-widget-root .vc-track {
+          display: flex;
+          transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+          will-change: transform;
+        }
+        #concy-widget-root .vc-slide {
+          min-width: 100%;
+          flex-shrink: 0;
+          aspect-ratio: 16 / 10;
+          overflow: hidden;
+        }
+        #concy-widget-root .vc-slide img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+          cursor: pointer;
+          transition: transform 0.3s ease;
+        }
+        #concy-widget-root .vc-slide img:hover {
+          transform: scale(1.03);
+        }
+        #concy-widget-root .vc-nav {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 30px;
+          height: 30px;
+          border: none;
+          border-radius: var(--radius-full, 50%);
+          background: rgba(15, 61, 62, 0.65);
+          color: #fff;
+          font-size: 1.1rem;
+          line-height: 1;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0;
+          transition: opacity 0.2s ease;
+          z-index: 2;
+        }
+        #concy-widget-root .venue-carousel:hover .vc-nav {
+          opacity: 1;
+        }
+        #concy-widget-root .vc-prev { left: 6px; }
+        #concy-widget-root .vc-next { right: 6px; }
+        #concy-widget-root .vc-dots {
+          display: flex;
+          justify-content: center;
+          gap: 5px;
+          padding: 6px 0 8px;
+        }
+        #concy-widget-root .vc-dot {
+          width: 7px;
+          height: 7px;
+          border: none;
+          border-radius: var(--radius-full, 50%);
+          background: var(--color-text-secondary, #999);
+          opacity: 0.4;
+          cursor: pointer;
+          padding: 0;
+          transition: opacity 0.2s ease, background 0.2s ease;
+        }
+        #concy-widget-root .vc-dot.active {
+          opacity: 1;
+          background: var(--color-primary, #0F3D3E);
+        }
+
+        /* Expanded/lightbox view */
+        #concy-widget-root .vc-lightbox {
+          position: fixed;
+          inset: 0;
+          z-index: 9999;
+          background: rgba(0, 0, 0, 0.85);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          animation: vcFadeIn 0.2s ease;
+        }
+        #concy-widget-root .vc-lightbox img {
+          max-width: 90vw;
+          max-height: 85vh;
+          object-fit: contain;
+          border-radius: 8px;
+        }
+        #concy-widget-root .vc-lightbox-close {
+          position: absolute;
+          top: 16px;
+          right: 20px;
+          background: none;
+          border: none;
+          color: #fff;
+          font-size: 1.8rem;
+          cursor: pointer;
+          line-height: 1;
+        }
+        @keyframes vcFadeIn {
+          from { opacity: 0; }
+          to   { opacity: 1; }
         }
     </style>
 </head>
@@ -1065,7 +1317,7 @@ class ConcyAPI {
                       window.location.hostname === '';
     this.baseUrl = isLocalDev ? `${config.api.backendUrl}/api/v1` : '/api/v1';
   }
-  async sendMessage(message, sessionId, shouldThink, onChunk, onComplete, onClarification, onComplaintForm) {
+  async sendMessage(message, sessionId, shouldThink, onChunk, onComplete, onClarification, onComplaintForm, onVenueImages) {
     try {
       const response = await fetch(`${this.baseUrl}${this.config.api.endpoints.chat}`, {
         method: 'POST',
@@ -1111,6 +1363,8 @@ class ConcyAPI {
                 return { response: cleanedFullText || fullResponse, suggestions: data.suggestions };
               } else if (currentEvent === 'complaint_form') {
                 if (onComplaintForm) onComplaintForm();
+              } else if (currentEvent === 'venue_images' && data?.venues) {
+                if (onVenueImages) onVenueImages(data.venues);
               } else if (currentEvent === 'error') {
                 throw new Error(data?.message || 'Stream error');
               } else if (currentEvent === 'done') {
@@ -1351,9 +1605,23 @@ class ConcyWidget {
           }
         };
 
+        const onVenueImages = (venues) => {
+          const msgDiv = this.elements.messages.querySelector('.message.bot-message.finalized:last-child');
+          if (!msgDiv || !venues.length) return;
+          const contentDiv = msgDiv.querySelector('.message-content');
+          const insertBefore = contentDiv.querySelector('.message-actions');
+          const wrapper = document.createElement('div');
+          wrapper.innerHTML = this.createVenueCarousel(venues);
+          while (wrapper.firstChild) {
+            contentDiv.insertBefore(wrapper.firstChild, insertBefore);
+          }
+          this.bindCarouselEvents(msgDiv);
+          this.scrollToBottom();
+        };
+
         this.lastUserMessage = message;
         const shouldThink = this.elements.thinkingToggle ? this.elements.thinkingToggle.checked : false;
-        await this.api.sendMessage(message, this.sessionId, shouldThink, onChunk, onComplete, onClarification, onComplaintForm);
+        await this.api.sendMessage(message, this.sessionId, shouldThink, onChunk, onComplete, onClarification, onComplaintForm, onVenueImages);
         this.hideTypingIndicator();
       } catch (error) {
         this.hideTypingIndicator();
@@ -1491,6 +1759,62 @@ class ConcyWidget {
     }
     return '';
   }
+  // Server-driven venue carousel: venues = [{ venue, images: [{ url, alt }] }]
+  createVenueCarousel(venues) {
+    if (!venues.length) return '';
+    return venues.map((venue, vi) => {
+      const slides = venue.images.map((img, i) =>
+        `<div class="vc-slide${i === 0 ? ' active' : ''}" data-index="${i}">
+          <img src="${encodeURI(img.url)}" alt="${img.alt || venue.venue}" loading="lazy" />
+        </div>`
+      ).join('');
+      const dots = venue.images.map((_, i) =>
+        `<button class="vc-dot${i === 0 ? ' active' : ''}" data-index="${i}" aria-label="Image ${i + 1}"></button>`
+      ).join('');
+      return `<div class="venue-carousel" data-carousel="${vi}">
+        <div class="vc-header">${venue.venue}</div>
+        <div class="vc-track">${slides}</div>
+        <button class="vc-nav vc-prev" aria-label="Previous">‹</button>
+        <button class="vc-nav vc-next" aria-label="Next">›</button>
+        <div class="vc-dots">${dots}</div>
+      </div>`;
+    }).join('');
+  }
+  bindCarouselEvents(container) {
+    container.querySelectorAll('.venue-carousel').forEach(carousel => {
+      const slides = carousel.querySelectorAll('.vc-slide');
+      const dots = carousel.querySelectorAll('.vc-dot');
+      if (slides.length <= 1) {
+        carousel.querySelectorAll('.vc-nav, .vc-dots').forEach(el => el.style.display = 'none');
+        return;
+      }
+      let current = 0;
+      const goTo = (idx) => {
+        slides[current].classList.remove('active');
+        dots[current].classList.remove('active');
+        current = (idx + slides.length) % slides.length;
+        slides[current].classList.add('active');
+        dots[current].classList.add('active');
+        const track = carousel.querySelector('.vc-track');
+        track.style.transform = `translateX(-${current * 100}%)`;
+      };
+      carousel.querySelector('.vc-prev').addEventListener('click', () => goTo(current - 1));
+      carousel.querySelector('.vc-next').addEventListener('click', () => goTo(current + 1));
+      dots.forEach(dot => dot.addEventListener('click', () => goTo(parseInt(dot.dataset.index))));
+      // Lightbox on image click
+      carousel.querySelectorAll('.vc-slide img').forEach(img => {
+        img.addEventListener('click', () => {
+          const lb = document.createElement('div');
+          lb.className = 'vc-lightbox';
+          lb.innerHTML = `<button class="vc-lightbox-close">&times;</button><img src="${img.src}" alt="${img.alt}" />`;
+          document.getElementById('concy-widget-root').appendChild(lb);
+          const close = () => lb.remove();
+          lb.querySelector('.vc-lightbox-close').addEventListener('click', close);
+          lb.addEventListener('click', (e) => { if (e.target === lb) close(); });
+        });
+      });
+    });
+  }
   addClarificationMessage(questions, originalQuery) {
     if (!questions || !questions.length) return;
     const q = questions[0];
@@ -1611,35 +1935,85 @@ class ConcyWidget {
     card.innerHTML = `
       <div class="message-content">
         <div class="complaint-form" id="concyComplaintForm">
-          <p class="complaint-form-intro">To help us follow this up, please share your details:</p>
-          <input type="text" id="cfName" placeholder="Your name *" autocomplete="name">
-          <input type="tel" id="cfPhone" placeholder="Phone number *" autocomplete="tel">
-          <input type="text" id="cfRes" placeholder="Reservation # (optional)">
-          <button id="cfSubmit">Send to our team</button>
-          <p class="complaint-form-error" id="cfError" style="display:none"></p>
+          <div class="complaint-form-header">
+            <div class="complaint-form-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+            </div>
+            <h4 class="complaint-form-title">We'd like to make this right</h4>
+          </div>
+          <p class="complaint-form-intro">Share your details and our team will follow up with you personally.</p>
+          <div class="cf-field">
+            <label class="cf-label" for="cfName">Name</label>
+            <input type="text" id="cfName" placeholder="Your full name" autocomplete="name">
+          </div>
+          <div class="cf-field">
+            <label class="cf-label" for="cfPhone">Phone</label>
+            <input type="tel" id="cfPhone" placeholder="Best number to reach you" autocomplete="tel">
+          </div>
+          <div class="cf-field">
+            <label class="cf-label" for="cfRes">Reservation <span class="cf-optional">(optional)</span></label>
+            <input type="text" id="cfRes" placeholder="e.g. #12345">
+          </div>
+          <div class="cf-field">
+            <label class="cf-label" for="cfNote">Additional details <span class="cf-optional">(optional)</span></label>
+            <textarea id="cfNote" placeholder="Anything else you'd like us to know..."></textarea>
+          </div>
+          <p class="complaint-form-error" id="cfError" style="display:none">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span id="cfErrorMsg"></span>
+          </p>
+          <div class="complaint-form-actions">
+            <button class="cf-dismiss-btn" id="cfDismiss">No thanks</button>
+            <button class="cf-submit-btn" id="cfSubmit">
+              <span id="cfSubmitText">Send to our team</span>
+            </button>
+          </div>
         </div>
       </div>`;
     this.elements.messages.appendChild(card);
     this.scrollToBottom();
     document.getElementById('cfSubmit').addEventListener('click', () => this.handleComplaintSubmit());
+    document.getElementById('cfDismiss').addEventListener('click', () => {
+      const formEl = document.getElementById('concyComplaintForm');
+      formEl.style.opacity = '0';
+      formEl.style.transform = 'translateY(-8px)';
+      formEl.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+      setTimeout(() => { document.getElementById('concyComplaintCard')?.remove(); }, 260);
+    });
+    setTimeout(() => document.getElementById('cfName')?.focus(), 380);
   }
 
   async handleComplaintSubmit() {
     const name = (document.getElementById('cfName')?.value || '').trim();
     const phone = (document.getElementById('cfPhone')?.value || '').trim();
     const res = (document.getElementById('cfRes')?.value || '').trim();
+    const note = (document.getElementById('cfNote')?.value || '').trim();
     const errorEl = document.getElementById('cfError');
+    const errorMsg = document.getElementById('cfErrorMsg');
     const submitBtn = document.getElementById('cfSubmit');
+    const submitText = document.getElementById('cfSubmitText');
+    const nameInput = document.getElementById('cfName');
+    const phoneInput = document.getElementById('cfPhone');
+
+    nameInput?.classList.remove('cf-invalid');
+    phoneInput?.classList.remove('cf-invalid');
 
     if (!name || !phone) {
-      errorEl.textContent = 'Please enter your name and phone number.';
-      errorEl.style.display = 'block';
+      if (!name) nameInput?.classList.add('cf-invalid');
+      if (!phone) phoneInput?.classList.add('cf-invalid');
+      errorMsg.textContent = 'Please enter your name and phone number.';
+      errorEl.style.display = 'flex';
       return;
     }
 
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Sending…';
+    submitText.textContent = 'Sending…';
+    submitBtn.insertAdjacentHTML('afterbegin', '<span class="cf-spinner"></span>');
     errorEl.style.display = 'none';
+
+    const complaintBody = [this.lastUserMessage, note].filter(Boolean).join('\n\n') || '(no message recorded)';
 
     try {
       const baseUrl = this.api.baseUrl;
@@ -1651,7 +2025,7 @@ class ConcyWidget {
           name,
           phone,
           reservation_number: res || null,
-          complaint_text: this.lastUserMessage || '(no message recorded)',
+          complaint_text: complaintBody,
           venue: null,
         }),
       });
@@ -1663,13 +2037,21 @@ class ConcyWidget {
         } catch { /* ignore parse error */ }
         throw new Error(msg);
       }
-      document.getElementById('concyComplaintForm').innerHTML =
-        '<p class="complaint-form-success">Thank you — our team will be in touch with you soon. We\'re committed to making your next visit a much better one.</p>';
+      document.getElementById('concyComplaintForm').innerHTML = `
+        <div class="complaint-form-success">
+          <div class="cf-success-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+          <p><strong>Thank you, ${name.split(' ')[0]}.</strong><br>Our team will be in touch with you soon. We're committed to making your next visit a much better one.</p>
+        </div>`;
     } catch (err) {
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Send to our team';
-      errorEl.textContent = err.message || 'Something went wrong. Please try again.';
-      errorEl.style.display = 'block';
+      submitBtn.querySelector('.cf-spinner')?.remove();
+      submitText.textContent = 'Send to our team';
+      errorMsg.textContent = err.message || 'Something went wrong. Please try again.';
+      errorEl.style.display = 'flex';
     }
   }
 
