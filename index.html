@@ -1517,15 +1517,90 @@ class ConcyWidget {
   async handleQuickQuestion(btn) {
     const question = btn.dataset.question;
     if (!question) return;
+    this.playSendSound();
     // Hide welcome, show chat
     if (this.elements.welcomeScreen) this.elements.welcomeScreen.classList.add('hidden');
     if (this.elements.messages) this.elements.messages.classList.remove('hidden');
     this.addMessage(question, 'user');
     await this.sendMessageToBackend(question);
   }
+  // 多彩な送信音 — 6 variations, cycled to avoid monotony
+  _sendSoundIdx = 0;
+  _sendSoundVariations = [
+    // 0: G5 bell — warm fundamental
+    { fund: 784,   partials: [{ r:1, a:0.08, d:0.7 },{ r:2.76, a:0.025, d:0.45 },{ r:5.4, a:0.012, d:0.25 }] },
+    // 1: C6 crystal — bright, airy
+    { fund: 1047,  partials: [{ r:1, a:0.06, d:0.5 },{ r:2.0, a:0.02, d:0.35 },{ r:4.17, a:0.01, d:0.2 }] },
+    // 2: E5 marimba — mellow wood
+    { fund: 659,   partials: [{ r:1, a:0.09, d:0.6 },{ r:4.0, a:0.018, d:0.3 },{ r:9.2, a:0.006, d:0.15 }] },
+    // 3: A5 chime — pentatonic warmth
+    { fund: 880,   partials: [{ r:1, a:0.07, d:0.65 },{ r:3.0, a:0.02, d:0.4 },{ r:5.83, a:0.009, d:0.22 }] },
+    // 4: D6 glass — ethereal, delicate
+    { fund: 1175,  partials: [{ r:1, a:0.05, d:0.45 },{ r:2.32, a:0.018, d:0.3 },{ r:4.7, a:0.008, d:0.18 }] },
+    // 5: B5 vibes — jazz lounge feel
+    { fund: 988,   partials: [{ r:1, a:0.065, d:0.55 },{ r:3.46, a:0.02, d:0.35 },{ r:6.14, a:0.008, d:0.2 }] },
+  ];
+  playSendSound() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const now = ctx.currentTime;
+      const v = this._sendSoundVariations[this._sendSoundIdx % this._sendSoundVariations.length];
+      this._sendSoundIdx++;
+
+      v.partials.forEach(p => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(v.fund * p.r, now);
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(p.a, now + 0.005);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + p.d);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + p.d + 0.05);
+      });
+
+      setTimeout(() => ctx.close(), 1200);
+    } catch (e) {
+      // fail silently
+    }
+  }
+  // 応答の到着音 — soft descending two-note, warm woodblock feel
+  playReceiveSound() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const now = ctx.currentTime;
+      // Descending minor third: E5 → C#5 — gentle, settling tone
+      const notes = [659.25, 554.37];
+      notes.forEach((freq, i) => {
+        const partials = [
+          { ratio: 1.0,  amp: 0.07, decay: 0.6  },
+          { ratio: 3.0,  amp: 0.015, decay: 0.35 },
+          { ratio: 5.83, amp: 0.008, decay: 0.2  },
+        ];
+        const start = now + i * 0.12;
+        partials.forEach(p => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq * p.ratio, start);
+          gain.gain.setValueAtTime(0, start);
+          gain.gain.linearRampToValueAtTime(p.amp, start + 0.004);
+          gain.gain.exponentialRampToValueAtTime(0.0001, start + p.decay);
+          osc.connect(gain).connect(ctx.destination);
+          osc.start(start);
+          osc.stop(start + p.decay + 0.05);
+        });
+      });
+      setTimeout(() => ctx.close(), 1200);
+    } catch (e) {
+      // fail silently
+    }
+  }
   async sendMessage() {
     const message = this.elements.input.value.trim();
     if (!message) return;
+    this.playSendSound();
     // Hide welcome, show chat
     if (this.elements.welcomeScreen) this.elements.welcomeScreen.classList.add('hidden');
     if (this.elements.messages) this.elements.messages.classList.remove('hidden');
@@ -1599,6 +1674,7 @@ class ConcyWidget {
 
           this.elements.messages.appendChild(messageDiv);
           this.scrollToBottom();
+          this.playReceiveSound();
         };
 
         const onClarification = (questions) => {
@@ -1939,6 +2015,7 @@ class ConcyWidget {
       e.preventDefault();
       const query = clarificationBtn.dataset.query;
       if (query) {
+        this.playSendSound();
         const optionsDiv = clarificationBtn.closest('.clarification-options');
         if (optionsDiv) optionsDiv.querySelectorAll('button').forEach(b => b.disabled = true);
         this.addMessage(query, 'user');
@@ -1951,6 +2028,7 @@ class ConcyWidget {
       e.preventDefault();
       const query = chip.dataset.query;
       if (query) {
+        this.playSendSound();
         const chipContainer = chip.closest('.suggestion-chips');
         if (chipContainer) chipContainer.remove();
         this.addMessage(query, 'user');
