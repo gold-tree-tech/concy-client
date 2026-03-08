@@ -1044,92 +1044,59 @@
         }
 
         /* ── Venue image carousel ──────────────────────────────── */
+        /* Scroll-snap venue image gallery */
         #concy-widget-root .venue-carousel {
-          position: relative;
-          width: 100%;
           margin: 10px 0 6px;
-          border-radius: var(--radius-lg, 12px);
-          overflow: hidden;
-          background: var(--color-bg-tertiary, #f0ede6);
         }
-        #concy-widget-root .vc-header {
-          padding: 8px 12px 4px;
-          font-family: var(--font-serif, 'Cormorant Garamond', serif);
-          font-size: 0.95rem;
-          font-weight: 600;
-          color: var(--color-text-primary, #0F3D3E);
-          letter-spacing: 0.02em;
-        }
-        #concy-widget-root .vc-track {
+        #concy-widget-root .vc-grid {
           display: flex;
-          transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-          will-change: transform;
+          gap: 8px;
+          overflow-x: auto;
+          scroll-snap-type: x mandatory;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+          padding: 2px 4px;
         }
-        #concy-widget-root .vc-slide {
-          min-width: 100%;
-          flex-shrink: 0;
-          aspect-ratio: 16 / 10;
-          overflow: hidden;
+        #concy-widget-root .vc-grid::-webkit-scrollbar {
+          display: none;
         }
-        #concy-widget-root .vc-slide img {
-          width: 100%;
-          height: 100%;
+        #concy-widget-root .vc-grid img {
+          min-width: 38%;
+          max-width: 38%;
+          aspect-ratio: 4 / 5;
           object-fit: cover;
+          border-radius: 12px;
+          cursor: grab;
           display: block;
-          cursor: pointer;
-          transition: transform 0.3s ease;
+          scroll-snap-align: start;
+          flex-shrink: 0;
+          user-select: none;
+          -webkit-user-drag: none;
         }
-        #concy-widget-root .vc-slide img:hover {
-          transform: scale(1.03);
-        }
-        #concy-widget-root .vc-nav {
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 30px;
-          height: 30px;
-          border: none;
-          border-radius: var(--radius-full, 50%);
-          background: rgba(15, 61, 62, 0.65);
-          color: #fff;
-          font-size: 1.1rem;
-          line-height: 1;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          opacity: 0;
-          transition: opacity 0.2s ease;
-          z-index: 2;
-        }
-        #concy-widget-root .venue-carousel:hover .vc-nav {
-          opacity: 1;
-        }
-        #concy-widget-root .vc-prev { left: 6px; }
-        #concy-widget-root .vc-next { right: 6px; }
-        #concy-widget-root .vc-dots {
+        /* Dot indicators */
+        #concy-widget-root .vc-indicators {
           display: flex;
           justify-content: center;
-          gap: 5px;
-          padding: 6px 0 8px;
+          gap: 6px;
+          padding: 8px 0 2px;
         }
-        #concy-widget-root .vc-dot {
-          width: 7px;
-          height: 7px;
-          border: none;
-          border-radius: var(--radius-full, 50%);
+        #concy-widget-root .vc-ind {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
           background: var(--color-text-secondary, #999);
-          opacity: 0.4;
-          cursor: pointer;
+          opacity: 0.35;
+          border: none;
           padding: 0;
-          transition: opacity 0.2s ease, background 0.2s ease;
+          cursor: pointer;
+          transition: opacity 0.2s;
         }
-        #concy-widget-root .vc-dot.active {
+        #concy-widget-root .vc-ind.active {
           opacity: 1;
           background: var(--color-primary, #0F3D3E);
         }
 
-        /* Expanded/lightbox view */
+        /* Lightbox */
         #concy-widget-root .vc-lightbox {
           position: fixed;
           inset: 0;
@@ -1156,6 +1123,44 @@
           font-size: 1.8rem;
           cursor: pointer;
           line-height: 1;
+        }
+        #concy-widget-root .vc-lightbox-nav {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          background: rgba(255,255,255,0.15);
+          border: none;
+          color: #fff;
+          font-size: 2rem;
+          width: 44px;
+          height: 44px;
+          border-radius: 50%;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        #concy-widget-root .vc-lightbox-prev { left: 16px; }
+        #concy-widget-root .vc-lightbox-next { right: 16px; }
+        #concy-widget-root .vc-lightbox-dots {
+          position: absolute;
+          bottom: 24px;
+          left: 50%;
+          transform: translateX(-50%);
+          display: flex;
+          gap: 8px;
+        }
+        #concy-widget-root .vc-lightbox-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: rgba(255,255,255,0.4);
+          border: none;
+          padding: 0;
+          cursor: pointer;
+        }
+        #concy-widget-root .vc-lightbox-dot.active {
+          background: #fff;
         }
         @keyframes vcFadeIn {
           from { opacity: 0; }
@@ -1325,6 +1330,7 @@ class ConcyAPI {
         body: JSON.stringify({ question: message, session_id: sessionId, user_id: null, mode: shouldThink ? 'deep' : 'opt' })
       });
 
+      if (response.status === 429) throw new Error('RATE_LIMITED');
       if (!response.ok) throw new Error('API request failed');
 
       const reader = response.body.getReader();
@@ -1334,6 +1340,8 @@ class ConcyAPI {
       let cleanedFullText = null; // full_text from backend's message_complete
       let currentEvent = null;
       let clarificationData = null; // set if clarification event received
+      let suggestionsData = null;   // set if suggestions event received
+      let venueImagesData = null;   // set if venue_images event received
 
       while (true) {
         const { done, value } = await reader.read();
@@ -1359,12 +1367,11 @@ class ConcyAPI {
               } else if (currentEvent === 'clarification' && data?.questions) {
                 clarificationData = data.questions;
               } else if (currentEvent === 'suggestions' && data?.suggestions && Array.isArray(data.suggestions)) {
-                if (onComplete) onComplete(cleanedFullText || fullResponse, data.suggestions);
-                return { response: cleanedFullText || fullResponse, suggestions: data.suggestions };
+                suggestionsData = data.suggestions;
               } else if (currentEvent === 'complaint_form') {
                 if (onComplaintForm) onComplaintForm();
               } else if (currentEvent === 'venue_images' && data?.venues) {
-                if (onVenueImages) onVenueImages(data.venues);
+                venueImagesData = data.venues;
               } else if (currentEvent === 'error') {
                 throw new Error(data?.message || 'Stream error');
               } else if (currentEvent === 'done') {
@@ -1373,8 +1380,9 @@ class ConcyAPI {
                   return { clarification: clarificationData };
                 }
                 const finalText = cleanedFullText || fullResponse;
-                if (onComplete) onComplete(finalText, []);
-                return { response: finalText || 'Response received' };
+                if (onComplete) onComplete(finalText, suggestionsData || []);
+                if (venueImagesData && onVenueImages) onVenueImages(venueImagesData);
+                return { response: finalText || 'Response received', suggestions: suggestionsData || [] };
               }
 
               currentEvent = null;
@@ -1625,7 +1633,10 @@ class ConcyWidget {
         this.hideTypingIndicator();
       } catch (error) {
         this.hideTypingIndicator();
-        this.addMessage(fallbackResponse || this.config.messages.errorGeneric, 'bot');
+        const msg = error?.message === 'RATE_LIMITED'
+          ? "You're sending messages a bit too fast — please wait a moment and try again."
+          : (fallbackResponse || this.config.messages.errorGeneric);
+        this.addMessage(msg, 'bot');
         console.error('[Widget] Error sending message:', error);
     } finally {
       this.isSending = false;
@@ -1759,61 +1770,109 @@ class ConcyWidget {
     }
     return '';
   }
-  // Server-driven venue carousel: venues = [{ venue, images: [{ url, alt }] }]
   createVenueCarousel(venues) {
     if (!venues.length) return '';
-    return venues.map((venue, vi) => {
-      const slides = venue.images.map((img, i) =>
-        `<div class="vc-slide${i === 0 ? ' active' : ''}" data-index="${i}">
-          <img src="${encodeURI(img.url)}" alt="${img.alt || venue.venue}" loading="lazy" />
-        </div>`
-      ).join('');
-      const dots = venue.images.map((_, i) =>
-        `<button class="vc-dot${i === 0 ? ' active' : ''}" data-index="${i}" aria-label="Image ${i + 1}"></button>`
-      ).join('');
-      return `<div class="venue-carousel" data-carousel="${vi}">
-        <div class="vc-header">${venue.venue}</div>
-        <div class="vc-track">${slides}</div>
-        <button class="vc-nav vc-prev" aria-label="Previous">‹</button>
-        <button class="vc-nav vc-next" aria-label="Next">›</button>
-        <div class="vc-dots">${dots}</div>
-      </div>`;
-    }).join('');
+    const origin = this.config.api.backendUrl || '';
+    // Flatten all venue images into a single row
+    const allImgs = venues.flatMap(venue =>
+      venue.images.map(img => ({ ...img, venue: venue.venue }))
+    );
+    if (!allImgs.length) return '';
+    const imgs = allImgs.map((img, i) =>
+      `<img src="${origin}${encodeURI(img.url)}" alt="${img.alt || img.venue}" loading="lazy" data-idx="${i}" />`
+    ).join('');
+    const dots = allImgs.map((_, i) =>
+      `<button class="vc-ind${i === 0 ? ' active' : ''}" data-idx="${i}"></button>`
+    ).join('');
+    return `<div class="venue-carousel">
+      <div class="vc-grid">${imgs}</div>
+      <div class="vc-indicators">${dots}</div>
+    </div>`;
   }
   bindCarouselEvents(container) {
     container.querySelectorAll('.venue-carousel').forEach(carousel => {
-      const slides = carousel.querySelectorAll('.vc-slide');
-      const dots = carousel.querySelectorAll('.vc-dot');
-      if (slides.length <= 1) {
-        carousel.querySelectorAll('.vc-nav, .vc-dots').forEach(el => el.style.display = 'none');
-        return;
-      }
-      let current = 0;
-      const goTo = (idx) => {
-        slides[current].classList.remove('active');
-        dots[current].classList.remove('active');
-        current = (idx + slides.length) % slides.length;
-        slides[current].classList.add('active');
-        dots[current].classList.add('active');
-        const track = carousel.querySelector('.vc-track');
-        track.style.transform = `translateX(-${current * 100}%)`;
-      };
-      carousel.querySelector('.vc-prev').addEventListener('click', () => goTo(current - 1));
-      carousel.querySelector('.vc-next').addEventListener('click', () => goTo(current + 1));
-      dots.forEach(dot => dot.addEventListener('click', () => goTo(parseInt(dot.dataset.index))));
-      // Lightbox on image click
-      carousel.querySelectorAll('.vc-slide img').forEach(img => {
+      const grid = carousel.querySelector('.vc-grid');
+      const imgs = Array.from(grid.querySelectorAll('img'));
+      const dots = Array.from(carousel.querySelectorAll('.vc-ind'));
+
+      // Dot sync via IntersectionObserver
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const idx = parseInt(entry.target.dataset.idx);
+            dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+          }
+        });
+      }, { root: grid, threshold: 0.6 });
+      imgs.forEach(img => observer.observe(img));
+
+      // Dot click → scroll to image
+      dots.forEach(dot => dot.addEventListener('click', () => {
+        const idx = parseInt(dot.dataset.idx);
+        imgs[idx]?.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+      }));
+
+      // Mouse drag to scroll (desktop)
+      let isDragging = false, startX = 0, scrollStart = 0, didDrag = false;
+      grid.addEventListener('mousedown', (e) => {
+        isDragging = true; didDrag = false;
+        startX = e.pageX; scrollStart = grid.scrollLeft;
+        grid.style.cursor = 'grabbing';
+        e.preventDefault();
+      });
+      document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const dx = e.pageX - startX;
+        if (Math.abs(dx) > 5) didDrag = true;
+        grid.scrollLeft = scrollStart - dx;
+      });
+      document.addEventListener('mouseup', () => {
+        isDragging = false;
+        grid.style.cursor = 'grab';
+      });
+
+      // Image click → lightbox (suppressed if dragged)
+      imgs.forEach((img, idx) => {
         img.addEventListener('click', () => {
-          const lb = document.createElement('div');
-          lb.className = 'vc-lightbox';
-          lb.innerHTML = `<button class="vc-lightbox-close">&times;</button><img src="${img.src}" alt="${img.alt}" />`;
-          document.getElementById('concy-widget-root').appendChild(lb);
-          const close = () => lb.remove();
-          lb.querySelector('.vc-lightbox-close').addEventListener('click', close);
-          lb.addEventListener('click', (e) => { if (e.target === lb) close(); });
+          if (didDrag) { didDrag = false; return; }
+          this.openLightbox(imgs, idx);
         });
       });
+      grid.style.cursor = 'grab';
     });
+  }
+  openLightbox(imgs, startIdx) {
+    let current = startIdx;
+    const lb = document.createElement('div');
+    lb.className = 'vc-lightbox';
+    const render = () => {
+      const dotsHtml = imgs.map((_, i) =>
+        `<button class="vc-lightbox-dot${i === current ? ' active' : ''}" data-i="${i}"></button>`
+      ).join('');
+      lb.innerHTML = `
+        <button class="vc-lightbox-close">&times;</button>
+        <button class="vc-lightbox-nav vc-lightbox-prev">&#8249;</button>
+        <img src="${imgs[current].src}" alt="${imgs[current].alt}" />
+        <button class="vc-lightbox-nav vc-lightbox-next">&#8250;</button>
+        <div class="vc-lightbox-dots">${dotsHtml}</div>`;
+      lb.querySelector('.vc-lightbox-close').onclick = close;
+      lb.querySelector('.vc-lightbox-prev').onclick = () => go(-1);
+      lb.querySelector('.vc-lightbox-next').onclick = () => go(1);
+      lb.querySelectorAll('.vc-lightbox-dot').forEach(d =>
+        d.onclick = () => { current = parseInt(d.dataset.i); render(); }
+      );
+      lb.onclick = (e) => { if (e.target === lb) close(); };
+    };
+    const go = (dir) => { current = (current + dir + imgs.length) % imgs.length; render(); };
+    const close = () => { lb.remove(); document.removeEventListener('keydown', onKey); };
+    const onKey = (e) => {
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowLeft') go(-1);
+      if (e.key === 'ArrowRight') go(1);
+    };
+    document.addEventListener('keydown', onKey);
+    document.getElementById('concy-widget-root').appendChild(lb);
+    render();
   }
   addClarificationMessage(questions, originalQuery) {
     if (!questions || !questions.length) return;
